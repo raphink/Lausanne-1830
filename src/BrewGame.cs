@@ -60,6 +60,8 @@ public class BrewGame : Node2D {
 	private Sprite BeerBurnt;
 	private Label Score;
 	private Label Time;
+	private AnimationPlayer AP;
+	private AnimationPlayer AP2;
 	
 	//Arrow sprites
 	private Sprite TopArrow;
@@ -77,8 +79,8 @@ public class BrewGame : Node2D {
 	private bool isGameOver = false;
 	private float GameOverScreenTime = 3.0f;
 	
-	private enum StickLocation {DOWN, RIGHT, UP, LEFT};
-	private StickLocation Location = StickLocation.DOWN;
+	private enum StickLocation {DOWN, RIGHT, UP, LEFT, NONE};
+	private StickLocation Location = StickLocation.NONE;
 	
 	private Context context;
 
@@ -90,6 +92,8 @@ public class BrewGame : Node2D {
 		Time = GetNode<Label>("Scoreboard/Time");
 		Score = GetNode<Label>("Scoreboard/Score");
 		context = GetNode<Context>("/root/Context");
+		AP = GetNode<AnimationPlayer>("AnimationPlayer");
+		AP2 = GetNode<AnimationPlayer>("AnimationPlayer2");
 		
 		Beer = GetNode<Sprite>("Beer");
 		Stick = GetNode<Sprite>("Stick");
@@ -160,22 +164,52 @@ public class BrewGame : Node2D {
 			float actionPressedL = Input.GetActionStrength("ui_left");
 			float actionPressedD = Input.GetActionStrength("ui_down");
 			float mult = 0.0f;
+			
+			bool R = Input.IsActionJustPressed("ui_right");
+			bool U = Input.IsActionJustPressed("ui_up");
+			bool L = Input.IsActionJustPressed("ui_left");
+			bool D = Input.IsActionJustPressed("ui_down");
 			switch(Location) {
 				case StickLocation.DOWN:
 					mult = actionPressedD - 
 							(actionPressedR + actionPressedU + actionPressedL) * BoostErrorDecrement;
+					if(D) {
+						AP.Play("ShowBravo");
+					} else if(R || U || L){
+						AP2.Play("ShowX");
+					}
 					break;
 				case StickLocation.RIGHT:
 					mult = actionPressedR - 
 							(actionPressedD + actionPressedU + actionPressedL) * BoostErrorDecrement;
+					if(R) {
+						AP.Play("ShowBravo");
+					} else if(D || U || L){
+						AP2.Play("ShowX");
+					}
 					break;
 				case StickLocation.UP:
 					mult = actionPressedU - 
 							(actionPressedR + actionPressedD + actionPressedL) * BoostErrorDecrement;
+					if(U) {
+						AP.Play("ShowBravo");
+					} else if(R || D || L){
+						AP2.Play("ShowX");
+					}
 					break;
 				case StickLocation.LEFT:
 					mult = actionPressedL - 
 							(actionPressedR + actionPressedU + actionPressedD) * BoostErrorDecrement;
+					if(L) {
+						AP.Play("ShowBravo");
+					} else if(R || U || D){
+						AP2.Play("ShowX");
+					}
+					break;
+				case StickLocation.NONE:
+					if(D || R || U || L) {
+						AP2.Play("ShowX");
+					}
 					break;
 				default: 
 					break;
@@ -275,6 +309,8 @@ public class BrewGame : Node2D {
 		LeftArrow.Frame = 0;
 		DownArrow.Frame = 0;
 		RightArrow.Frame = 0;
+		
+		Location = StickLocation.NONE;
 	}
 	
 	public void _on_Top_Entered(Area2D obj) {
