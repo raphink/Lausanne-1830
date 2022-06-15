@@ -24,12 +24,16 @@ public class Map : Node2D
 	
 	private AudioStreamPlayer ASP;
 	private Sprite S;
+	private Context context;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		ASP = GetNode<AudioStreamPlayer>("../ButtonSound");
 		S = GetNode<Sprite>("../TabMap");
+		context = GetNode<Context>("/root/Context");
+		
+		context._UpdateHighlightedLocation(context._GetLocation());
 	}
 
 	public void _on_MapButton_pressed() {
@@ -44,6 +48,18 @@ public class Map : Node2D
 			S.Frame = 1;
 		}
 		hidden = !hidden;
+	}
+
+	public override void _Process(float delta) {
+		if(Visible) {
+			int currentHighlight = (int)context._GetLocation();
+			if(Input.IsActionJustPressed("ui_left")) {
+				context._UpdateHighlightedLocation((Locations)((currentHighlight - 1) % (int)Locations.N_LOCATIONS));
+			}
+			if(Input.IsActionJustPressed("ui_right")) {
+				context._UpdateHighlightedLocation((Locations)((currentHighlight + 1) % (int)Locations.N_LOCATIONS));
+			}
+		}
 	}
 
 }

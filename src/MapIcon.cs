@@ -42,6 +42,35 @@ public class MapIcon : TextureButton {
 		//Update You are Here
 		SetYouAreHerePos(context._GetLocation());
 	}
+
+	private Locations IconLocation() {
+		switch(id) {
+			case "Intro/Intro":
+				return Locations.INTRO;
+			case "Palud/ProtoPalud":
+				return Locations.PALUD;
+			case "Casino/Casino":
+				return Locations.CASINO;
+			case "Brasserie/Brasserie":
+				return Locations.BRASSERIE;
+			case "Flon/Moulin":
+				return Locations.MOULIN;
+			case "Flon/Flon":
+				return Locations.FLON;
+			default:
+				return Locations.INTRO;
+		}
+	}
+
+	public override void _Process(float delta) {
+		if(Visible) {
+			if(context._GetHighlightedLocation() == IconLocation()) {
+				var tmp = TextureHover;
+				TextureHover = TextureNormal;
+				TextureNormal = tmp;
+			} 
+		}
+	}
 	
 	private void SetYouAreHerePos(Locations l) {
 		switch(l) {

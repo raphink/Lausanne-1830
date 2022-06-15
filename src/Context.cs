@@ -22,7 +22,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 public enum GameStates {INIT, PLAYING, COMPLETE};
-public enum Locations {INTRO, PALUD, BRASSERIE, CASINO, MOULIN, FLON};
+public enum Locations {INTRO, PALUD, BRASSERIE, CASINO, MOULIN, FLON, N_LOCATIONS};
 public enum Quests {NONE, TUTORIAL};
 public enum QuestStatus {NONE, ON_GOING, COMPLETE, NOT_STARTED};
 
@@ -36,6 +36,7 @@ public class Context : Node {
 	//Game state data
 	private GameStates GameState = GameStates.INIT;
 	private Locations CurrentLocation = Locations.INTRO;
+	private Locations highlightedLoc = Locations.INTRO;
 	private Quests CurrentQuest = Quests.TUTORIAL;
 	private QuestStatus CurrentQuestStatus = QuestStatus.NOT_STARTED;
 	private int QuestStateId = -2;
@@ -110,6 +111,14 @@ public class Context : Node {
 		
 		//Reload context
 		_Ready();
+	}
+
+	public void _UpdateHighlightedLocation(Locations loc) {
+		highlightedLoc = loc;
+	}
+
+	public Locations _GetHighlightedLocation() {
+		return highlightedLoc;
 	}
 	
 	public void _UpdateLocation(string id) {

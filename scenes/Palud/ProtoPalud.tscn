@@ -1329,13 +1329,13 @@ texture = ExtResource( 41 )
 [node name="Cuir2" type="AnimatedSprite" parent="YSort"]
 position = Vector2( 482, 295 )
 frames = SubResource( 61 )
-frame = 8
+frame = 24
 playing = true
 
 [node name="AfficheSprite" type="AnimatedSprite" parent="YSort"]
 position = Vector2( 51.5568, 190.668 )
 frames = SubResource( 79 )
-frame = 1
+frame = 30
 playing = true
 
 [node name="Affiche" parent="YSort" instance=ExtResource( 16 )]
